@@ -1,0 +1,2 @@
+10.0.4.100 video.cdn.assignment2.test 10.0.1.100
+10.0.5.100 video.cdn.assignment2.test 10.0.2.100

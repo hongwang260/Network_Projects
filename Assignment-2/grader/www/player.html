@@ -1,0 +1,38 @@
+<html>
+<head>
+    <title>HLS Player for Assignment 2</title>
+</head>
+<body>
+    <script src="hls.min.js"></script>
+    <video id="player" controls autoplay></video>
+    <script>
+        var manifest = new URLSearchParams(window.location.search).get("manifest");
+        var video = document.getElementById("player");
+        if (Hls.isSupported()) {
+            var hls = new Hls({
+                startLevel: 0,            // Start with lowest quality
+                autoLevelEnabled: false,  // Disable automatic bitrate selection
+                maxMaxBufferLength: 10,   // Avoid prefetching >10s ahead
+            })
+            hls.loadSource(manifest);
+            hls.attachMedia(video);
+            // The following ensures that the player uses the specified quality level and does not change it.
+            hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                hls.currentLevel = hls.startLevel;
+            });
+            // The following ensures that the player always retries to recover when there is a fatal error.
+            hls.on(Hls.Events.ERROR, function (event, data) {
+                if (data.fatal) {
+                    switch (data.type) {
+                        case Hls.ErrorTypes.MEDIA_ERROR: hls.recoverMediaError(); break;
+                        case Hls.ErrorTypes.NETWORK_ERROR: hls.loadSource(); break;
+                        default: hls.loadSource(); hls.recoverMediaError(); break;
+                    }
+                }
+            });
+        } else {
+            console.error("HLS not supported")
+        }
+    </script>
+</body>
+</html>

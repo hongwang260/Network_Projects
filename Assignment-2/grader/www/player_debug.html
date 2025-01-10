@@ -1,0 +1,69 @@
+<html>
+
+<head>
+    <title>HLS Player for Assignment 2</title>
+</head>
+<style>
+    #log {
+        background-color: #f0f0f0;
+        padding: 10px;
+        border: 1px solid #ccc;
+        height: 200px;
+        width: 1000px;
+        overflow-y: scroll;
+        font-family: monospace;
+    }
+</style>
+
+<body>
+    <video id="player" controls autoplay></video>
+    <div>
+        <h3>Live Console Log</h3>
+        <div id="log"></div>
+    </div>
+    <script>
+        var logFunction = console.log;
+        var consoleDiv = document.getElementById("log");
+        console.log = function () {
+            logFunction.apply(console, arguments);
+            var newLog = document.createElement("div");
+            newLog.textContent = Array.from(arguments).join(" ");
+            consoleDiv.appendChild(newLog);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight; // Scroll to the bottom
+        };
+    </script>
+    <script src="hls.min.js"></script>
+    <script>
+        var manifest = new URLSearchParams(window.location.search).get("manifest");
+        var video = document.getElementById("player");
+        if (Hls.isSupported()) {
+            var hls = new Hls({
+                debug: true,
+                startLevel: 0,            // Start with lowest quality
+                autoLevelEnabled: false,  // Disable automatic bitrate selection
+                maxMaxBufferLength: 10,   // Avoid prefetching >10s ahead
+                highBufferWatchdogPeriod: Infinity
+            })
+            hls.loadSource(manifest);
+            hls.attachMedia(video);
+            // The following ensures that the player uses the specified quality level and does not change it.
+            hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                hls.currentLevel = hls.startLevel;
+            });
+            // The following ensures that the player always retries to recover when there is a fatal error.
+            hls.on(Hls.Events.ERROR, function (event, data) {
+                if (data.fatal) {
+                    switch (data.type) {
+                        case Hls.ErrorTypes.MEDIA_ERROR: hls.recoverMediaError(); break;
+                        case Hls.ErrorTypes.NETWORK_ERROR: hls.loadSource(); break;
+                        default: hls.loadSource(); hls.recoverMediaError(); break;
+                    }
+                }
+            });
+        } else {
+            console.error("HLS not supported")
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,26 @@
+
+----------------------------------------------------------------------
+Ran 0 tests in 0.000s
+
+NO TESTS RAN
+test01_CheckServerMapping (IntegrationGeolocation.IntegrationGeolocation.test01_CheckServerMapping)
+For each client, check that the servers were assigned correctly ... ok
+test02_StreamFromServer1 (IntegrationGeolocation.IntegrationGeolocation.test02_StreamFromServer1)
+Check that we are able to successfully stream from the first proxy. ... ok
+test03_StreamFromServer2 (IntegrationGeolocation.IntegrationGeolocation.test03_StreamFromServer2)
+Check that we are able to successfully stream from the second proxy. ... ok
+test01_CheckServerMapping (IntegrationRoundRobin.IntegrationRoundRobin.test01_CheckServerMapping)
+For each client, check that the servers were assigned correctly ... ok
+test02_StreamFromServer1 (IntegrationRoundRobin.IntegrationRoundRobin.test02_StreamFromServer1)
+Check that we are able to successfully stream from the first proxy. ... ok
+test03_StreamFromServer2 (IntegrationRoundRobin.IntegrationRoundRobin.test03_StreamFromServer2)
+Check that we are able to successfully stream from the second proxy. ... ok
+
+Slowest test durations
+----------------------------------------------------------------------
+21.956s    test02_StreamFromServer1 (IntegrationGeolocation.IntegrationGeolocation.test02_StreamFromServer1)
+
+----------------------------------------------------------------------
+Ran 6 tests in 91.572s
+
+OK
